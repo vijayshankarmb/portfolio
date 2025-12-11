@@ -1,10 +1,12 @@
 import React from 'react'
+import Container from '../ui/Container'
+import { SectionHeadler } from '../common/SectionHandler'
 
 const Projects = () => {
   return (
-    <section className='py-8'>
-        <h2 className='text-xl font-semibold mb-4'>Projects</h2>
-    </section>
+       <Container className="mt-20">
+      <SectionHeadler subHeading="Featured" heading="Projects" />
+      </Container>
   )
 }
 

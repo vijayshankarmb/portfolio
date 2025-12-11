@@ -26,7 +26,7 @@ export const skillComponents = {
 };
 
 export const heroConfig = {
-    name: 'Vijay Shankar',
+    name: 'Vijay',
     title: 'A Full Stack web developer.',
     avatar: '/assets/logo.jpg',
 
@@ -69,12 +69,6 @@ export const heroConfig = {
             text: 'Resume / CV',
             href: '/resume',
             icon: 'CV',
-        },
-        {
-            variant: 'default',
-            text: 'Get in touch',
-            href: '/contact',
-            icon: 'Chat',
         },
     ],
 };

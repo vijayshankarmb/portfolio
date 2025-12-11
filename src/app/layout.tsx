@@ -48,9 +48,7 @@ export const metadata: Metadata = {
     images: ["/assets/logo.jpg"], // Using the logo as a fallback twitter image if no specific OG exists
     creator: "@vijayXcodes",
   },
-  icons: {
-    icon: "/assets/logo.jpg",
-  },
+
   manifest: "/manifest.webmanifest",
 };
 

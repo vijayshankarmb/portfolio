@@ -38,9 +38,9 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <ReactLenis>
-              <Navbar/>
-            {children}
+            <ReactLenis root>
+              <Navbar />
+              {children}
             </ReactLenis>
           </ThemeProvider>
         </body>

@@ -3,6 +3,8 @@ import Container from '@/components/ui/Container'
 import Hero from '@/components/home/Hero'
 import Projects from '@/components/home/Projects'
 import About from '@/components/home/About'
+import Github from '@/components/home/Github'
+import Footer from '@/components/common/Footer'
 
 const Home = () => {
   return (
@@ -10,6 +12,8 @@ const Home = () => {
       <Hero />
       <Projects />
       <About />
+      <Github />
+      <Footer />
     </Container>
   )
 }

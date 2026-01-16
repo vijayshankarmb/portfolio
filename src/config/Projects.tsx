@@ -2,6 +2,7 @@ import ExpressJs from '@/components/technologies/ExpressJs';
 import MongoDB from '@/components/technologies/MongoDB';
 import NodeJs from '@/components/technologies/NodeJs';
 import ReactIcon from '@/components/technologies/ReactIcon';
+import NextJs from '@/components/technologies/NextJs';
 import Shadcn from '@/components/technologies/Shadcn';
 import TailwindCss from '@/components/technologies/TailwindCss';
 import TypeScript from '@/components/technologies/TypeScript';
@@ -27,6 +28,25 @@ export const projects: Project[] = [
         ],
         github: 'https://github.com/vijayshankarmb/PMS-frontend.git',
         live: 'https://project-management-system-one-zeta.vercel.app/',
+        details: false,
+        projectDetailsPageSlug: '',
+        isWorking: true,
+    },
+    {
+        title: 'CompoLab – Next.js SaaS Platform with Advanced Motion UI',
+        description: 'CompoLab is a high-performance web application designed to demonstrate the pinnacle of modern frontend engineering. Built on the bleeding edge with Next.js 16 and React 19, it features a sophisticated dark-mode aesthetic that utilizes glassmorphism and subtle gradients to create a premium user experience.',
+        image: '/assets/compolab.png',
+        link: 'https://compo-lab-lilac.vercel.app/',
+        technologies: [
+            { name: 'React 19', icon: <ReactIcon key="react" /> },
+            { name: 'Next.js', icon: <NextJs key="nextjs" /> },
+            { name: 'TypeScript', icon: <TypeScript key="typescript" /> },
+            { name: 'Tailwind CSS', icon: <TailwindCss key="tailwindcss" /> },
+            { name: 'Vercel', icon: <Vercel key="vercel" /> },
+            { name: 'Shadcn/UI', icon: <Shadcn key="shadcn" /> },
+        ],
+        github: 'https://github.com/vijayshankarmb/compo-lab.git',
+        live: 'https://compo-lab-lilac.vercel.app/',
         details: false,
         projectDetailsPageSlug: '',
         isWorking: true,

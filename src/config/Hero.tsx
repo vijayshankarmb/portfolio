@@ -67,7 +67,7 @@ export const heroConfig = {
         {
             variant: 'outline',
             text: 'Resume / CV',
-            href: '/resume',
+            href: '/assets/resume.pdf',
             icon: 'CV',
         },
     ],
@@ -81,7 +81,7 @@ export const socialLinks = [
     },
     {
         name: 'LinkedIn',
-        href: 'https://www.linkedin.com',
+        href: 'https://www.linkedin.com/in/vijay-shankar-a63650363/',
         icon: <LinkedIn />,
     },
     {

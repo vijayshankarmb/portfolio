@@ -4,13 +4,10 @@ export default function Container({
     children,
     className,
     ...props
-}: {
-    children: React.ReactNode;
-    className?: string;
-}) {
+}: React.HTMLAttributes<HTMLDivElement>) {
     return (
         <div
-            className={`container mx-auto max-w-3xl px-4 animate-fade-in-blur ${className}`}
+            className={`container mx-auto max-w-3xl px-4 animate-fade-in-blur ${className || ''}`}
             {...props}
         >
             {children}

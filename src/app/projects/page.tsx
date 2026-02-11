@@ -11,7 +11,7 @@ export const metadata = {
 
 export default function ProjectsPage() {
     return (
-        <Container className="min-h-screen py-16 space-y-12 md:border md:border-b-0">
+        <Container className="min-h-screen py-16 space-y-12 md:border md:border-b-0" >
             <div className="space-y-4">
                 <SectionHeadler
                     subHeading="Portfolio"

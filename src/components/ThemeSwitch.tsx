@@ -34,9 +34,6 @@ export const useThemeToggle = ({
 
     let styleElement = document.getElementById(styleId) as HTMLStyleElement;
 
-    console.log('style ELement', styleElement);
-    console.log('name', name);
-
     if (!styleElement) {
       styleElement = document.createElement('style');
       styleElement.id = styleId;
@@ -44,14 +41,20 @@ export const useThemeToggle = ({
     }
 
     styleElement.textContent = css;
-
-    console.log('content updated');
   }, []);
 
-  const toggleTheme = useCallback(() => {
+  const toggleTheme = useCallback((event?: React.MouseEvent | MouseEvent) => {
     setIsDark(!isDark);
 
-    const animation = createAnimation(variant, start, blur, gifUrl);
+    let x = 0;
+    let y = 0;
+
+    if (event) {
+      x = event.clientX;
+      y = event.clientY;
+    }
+
+    const animation = createAnimation(variant, start, blur, gifUrl, x, y);
 
     updateStyles(animation.css, animation.name);
 
@@ -76,7 +79,6 @@ export const useThemeToggle = ({
     gifUrl,
     updateStyles,
     isDark,
-    setIsDark,
   ]);
 
   const setCrazyLightTheme = useCallback(() => {
@@ -98,7 +100,7 @@ export const useThemeToggle = ({
     }
 
     document.startViewTransition(switchTheme);
-  }, [setTheme, variant, start, blur, gifUrl, updateStyles, setIsDark]);
+  }, [setTheme, variant, start, blur, gifUrl, updateStyles]);
 
   const setCrazyDarkTheme = useCallback(() => {
     setIsDark(true);
@@ -119,7 +121,7 @@ export const useThemeToggle = ({
     }
 
     document.startViewTransition(switchTheme);
-  }, [setTheme, variant, start, blur, gifUrl, updateStyles, setIsDark]);
+  }, [setTheme, variant, start, blur, gifUrl, updateStyles]);
 
   return {
     isDark,
@@ -158,10 +160,10 @@ export const ThemeToggleButton = ({
       variant="ghost"
       size="icon"
       className={cn(
-        'size-10 cursor-pointer  p-0 transition-all duration-300 active:scale-95',
+        'size-10 cursor-pointer p-0 transition-all duration-300 active:scale-95',
         className,
       )}
-      onClick={toggleTheme}
+      onClick={(e) => toggleTheme(e)}
       aria-label="Toggle theme"
     >
       <span className="sr-only">Toggle theme</span>
@@ -278,6 +280,8 @@ export const createAnimation = (
   start: AnimationStart = 'center',
   blur = false,
   url?: string,
+  x?: number,
+  y?: number,
 ): Animation => {
   const svg = generateSVG(variant, start);
   const transformOrigin = getTransformOrigin(start);
@@ -385,8 +389,9 @@ export const createAnimation = (
     };
   }
   if (variant === 'circle' && start == 'center') {
+    const clipPosition = x !== undefined && y !== undefined ? `${x}px ${y}px` : '50% 50%';
     return {
-      name: `${variant}-${start}${blur ? '-blur' : ''}`,
+      name: `${variant}-${start}${blur ? '-blur' : ''}-${x}-${y}`,
       css: `
        ::view-transition-group(root) {
         animation-duration: 0.7s;
@@ -410,24 +415,24 @@ export const createAnimation = (
 
       @keyframes reveal-dark${blur ? '-blur' : ''} {
         from {
-          clip-path: circle(0% at 50% 50%);
+          clip-path: circle(0% at ${clipPosition});
           ${blur ? 'filter: blur(8px);' : ''}
         }
         ${blur ? '50% { filter: blur(4px); }' : ''}
         to {
-          clip-path: circle(100.0% at 50% 50%);
+          clip-path: circle(150.0% at ${clipPosition});
           ${blur ? 'filter: blur(0px);' : ''}
         }
       }
 
       @keyframes reveal-light${blur ? '-blur' : ''} {
         from {
-           clip-path: circle(0% at 50% 50%);
+           clip-path: circle(0% at ${clipPosition});
            ${blur ? 'filter: blur(8px);' : ''}
         }
         ${blur ? '50% { filter: blur(4px); }' : ''}
         to {
-          clip-path: circle(100.0% at 50% 50%);
+          clip-path: circle(150.0% at ${clipPosition});
           ${blur ? 'filter: blur(0px);' : ''}
         }
       }

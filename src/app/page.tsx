@@ -21,7 +21,6 @@ const Home = () => {
       <Projects />
       <Divider />
       <About />
-      <Divider />
       <Github />
       <Divider />
       <Footer />

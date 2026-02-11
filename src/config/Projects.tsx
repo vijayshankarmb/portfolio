@@ -11,6 +11,28 @@ import { Project } from '@/types/project';
 
 export const projects: Project[] = [
     {
+        title: 'AI-Powered Resume Analyzer & Optimizer',
+        description:
+            'A full-stack AI-driven resume analysis platform built with Next.js, React 19, and Express.js that parses PDF resumes, scores them on ATS compatibility, structure, and readability, and leverages Google Gemini 2.5 Flash to deliver actionable improvement suggestions and resume-to-job-description comparison with match scoring.',
+        image: '/assets/resumeiq.png',
+        link: 'https://resumeiq.vijayx.in/',
+        technologies: [
+            { name: 'Next.js', icon: <NextJs key="nextjs" /> },
+            { name: 'React 19', icon: <ReactIcon key="react" /> },
+            { name: 'TypeScript', icon: <TypeScript key="typescript" /> },
+            { name: 'Tailwind CSS', icon: <TailwindCss key="tailwindcss" /> },
+            { name: 'Node.js', icon: <NodeJs key="nodejs" /> },
+            { name: 'Express.js', icon: <ExpressJs key="expressjs" /> },
+            { name: 'MongoDB', icon: <MongoDB key="mongodb" /> },
+            { name: 'Vercel', icon: <Vercel key="vercel" /> },
+        ],
+        github: 'https://github.com/vijayshankarmb/resumeiq-fe.git',
+        live: 'https://resumeiq.vijayx.in/',
+        details: false,
+        projectDetailsPageSlug: '',
+        isWorking: true,
+    },
+    {
         title: 'Modern Full-Stack Project Management System',
         description:
             'A robust and scalable project management application built using the MERN stack (MongoDB, Express, React, Node.js) with strict TypeScript integration. The system features a secure, maintainable backend and a responsive, modern frontend designed for efficient task tracking, user management, and collaboration.',

@@ -22,5 +22,5 @@ export const mySkills = [
 
 export const about = {
   name: 'Vijay Shankar',
-  description: `I'm a Full Stack web developer and Open Source Contributor, I love building products to solve real-world problems. I'm specialized in building MVP's.`,
+  description: `I'm a Full Stack Developer who enjoys building complete, end-to-end web applications from responsive frontends to scalable backend systems. I work with modern TypeScript-based technologies and focus on writing clean, maintainable code. I'm passionate about solving real-world problems and continuously improving my engineering and problem-solving skills.`,
 };

@@ -60,7 +60,7 @@ export const heroConfig = {
 
     description: {
         template:
-            'I build interactive web apps using {skills:0}, {skills:1}, {skills:2}, {skills:3} and {skills:4}. With a focus on <b>UI</b> design. Enthusiastic about <b>Three.js</b>, driven by a keen eye for design.',
+            'I build modern full-stack web applications using {skills:0}, {skills:1}, {skills:2}, {skills:3} and {skills:4}. I enjoy crafting clean <b>UI</b> and designing <b>scalable</b> backend systems. I am passionate about learning new technologies and continuously improving my skills.',
     },
 
     buttons: [

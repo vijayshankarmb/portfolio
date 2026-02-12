@@ -68,6 +68,7 @@ export default function RootLayout({
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
+            themes={['light', 'dark', 'extra-dark', 'system']}
           >
             <ReactLenis root>
               <Navbar />

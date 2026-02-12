@@ -1,12 +1,17 @@
 'use client';
 
 import { cn } from '@/lib/utils';
+import { Check, ChevronDown, Lightbulb, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import React, { useCallback, useEffect, useState } from 'react';
-
-import Moon from './svgs/Moon';
-import Sun from './svgs/Sun';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Button } from './ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from './ui/dropdown-menu';
 
 export const useThemeToggle = ({
   variant = 'circle',
@@ -169,6 +174,181 @@ export const ThemeToggleButton = ({
       <span className="sr-only">Toggle theme</span>
       {isDark ? <Moon className="size-4" /> : <Sun className="size-4" />}
     </Button>
+  );
+};
+
+// Theme options for dropdown
+const THEME_OPTIONS = [
+  {
+    id: 'light' as const,
+    label: 'Light',
+    subheading: 'You hate your retinas?',
+    Icon: Sun,
+  },
+  {
+    id: 'dark' as const,
+    label: 'Dark',
+    subheading: 'Normal people use this',
+    Icon: Moon,
+  },
+  {
+    id: 'extra-dark' as const,
+    label: 'The Real Dark',
+    subheading: 'Your cursor is flashlight',
+    Icon: Lightbulb,
+  },
+];
+
+// Torch overlay for extra-dark mode - full app black with spotlight centered on cursor (x,y)
+function TorchOverlay() {
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const TORCH_RADIUS = 500; // Large spotlight centered on cursor
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const initX = window.innerWidth / 2;
+    const initY = window.innerHeight / 2;
+    setMousePos({ x: initX, y: initY });
+
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    return () => document.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  const overlay = (
+    <div
+      className="pointer-events-none fixed top-0 left-0 z-[99999]"
+      style={{
+        width: '100vw',
+        height: '100vh',
+        minWidth: '100vw',
+        minHeight: '100vh',
+        background: `radial-gradient(circle ${TORCH_RADIUS}px at ${mousePos.x}px ${mousePos.y}px, transparent 0%, rgba(0,0,0,0.6) 50%, black 100%)`,
+      }}
+      aria-hidden
+    />
+  );
+
+  if (typeof document === 'undefined') return null;
+  return createPortal(overlay, document.body);
+}
+
+export const ThemeDropdown = ({
+  className = '',
+  variant = 'circle',
+  start = 'center',
+  blur = false,
+  gifUrl = '',
+}: {
+  className?: string;
+  variant?: AnimationVariant;
+  start?: AnimationStart;
+  blur?: boolean;
+  gifUrl?: string;
+}) => {
+  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { setCrazyLightTheme, setCrazyDarkTheme } = useThemeToggle({
+    variant,
+    start,
+    blur,
+    gifUrl,
+  });
+  const [mounted, setMounted] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const effectiveTheme = theme === 'extra-dark' ? 'extra-dark' : resolvedTheme ?? theme ?? 'light';
+  const isExtraDark = effectiveTheme === 'extra-dark';
+
+  const handleThemeSelect = (themeId: 'light' | 'dark' | 'extra-dark') => {
+    if (themeId === 'light') {
+      setCrazyLightTheme();
+    } else if (themeId === 'dark') {
+      setCrazyDarkTheme();
+    } else {
+      setTheme('extra-dark');
+    }
+  };
+
+  const getThemeIcon = () => {
+    if (effectiveTheme === 'extra-dark') return <Lightbulb className="size-4" />;
+    if (effectiveTheme === 'dark') return <Moon className="size-4" />;
+    return <Sun className="size-4" />;
+  };
+
+  if (!mounted) {
+    return (
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        className={cn(
+          'cursor-pointer gap-1.5 px-3 py-2 transition-all duration-300 active:scale-95',
+          className,
+        )}
+        aria-label="Theme options"
+      >
+        <Sun className="size-4" />
+        <ChevronDown className="size-3.5" />
+      </Button>
+    );
+  }
+
+  return (
+    <>
+      <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
+        <DropdownMenuTrigger asChild>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className={cn(
+              'cursor-pointer gap-1.5 px-3 py-2 transition-all duration-300 active:scale-95',
+              className,
+            )}
+            aria-label="Theme options"
+          >
+            {getThemeIcon()}
+            {dropdownOpen ? (
+              <ChevronDown className="size-3.5 rotate-180" />
+            ) : (
+              <ChevronDown className="size-3.5" />
+            )}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="min-w-[220px]">
+          {THEME_OPTIONS.map((option) => {
+            const isSelected = effectiveTheme === option.id;
+            const OptionIcon = option.Icon;
+            return (
+              <DropdownMenuItem
+                key={option.id}
+                onClick={() => handleThemeSelect(option.id)}
+                className="flex cursor-pointer items-start gap-3 py-3"
+              >
+                <OptionIcon className="mt-0.5 size-5 shrink-0" />
+                <div className="flex flex-1 flex-col gap-0.5">
+                  <span className="font-semibold">{option.label}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {option.subheading}
+                  </span>
+                </div>
+                {isSelected && (
+                  <Check className="size-4 shrink-0 text-foreground" aria-hidden />
+                )}
+              </DropdownMenuItem>
+            );
+          })}
+        </DropdownMenuContent>
+      </DropdownMenu>
+      {isExtraDark && <TorchOverlay />}
+    </>
   );
 };
 

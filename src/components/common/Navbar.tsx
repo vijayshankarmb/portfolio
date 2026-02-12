@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { NavbarConfig } from '@/config/Navbar'
 import Container from '../ui/Container'
 import Image from 'next/image'
-import { ThemeToggleButton } from '../ThemeSwitch'
+import { ThemeDropdown } from '../ThemeSwitch'
 
 const Navbar = () => {
     return (
@@ -31,7 +31,7 @@ const Navbar = () => {
                     </div>
                 </div>
                 <div className="flex items-center gap-4">
-                    <ThemeToggleButton variant="rectangle" start="top-down" blur />
+                    <ThemeDropdown variant="rectangle" start="top-down" blur />
                 </div>
             </div>
         </Container>

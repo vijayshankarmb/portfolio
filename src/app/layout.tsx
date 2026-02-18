@@ -3,8 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ViewTransitions } from 'next-view-transitions';
-import ReactLenis from "lenis/react";
-import Navbar from "@/components/common/Navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -70,10 +68,7 @@ export default function RootLayout({
             disableTransitionOnChange
             themes={['light', 'dark', 'extra-dark', 'system']}
           >
-            <ReactLenis root>
-              <Navbar />
               {children}
-            </ReactLenis>
           </ThemeProvider>
           <script
             type="application/ld+json"

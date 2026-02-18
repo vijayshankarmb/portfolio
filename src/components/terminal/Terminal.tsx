@@ -8,14 +8,18 @@ type HistoryItem = {
     content: string
 }
 
-export default function Terminal() {
+interface TerminalProps {
+    onCommand?: (input: string, isError: boolean) => void;
+}
+
+export default function Terminal({ onCommand }: TerminalProps) {
 
     const [opacity, setOpacity] = useState(1);
     const [currentInput, setCurrentInput] = useState("");
     const [history, setHistory] = useState<HistoryItem[]>([
         {
             type: "output",
-            content: "Welcome to Radhe Radhe Terminal. Type help to begin."
+            content: "Welcome to Krishna Domine. Type help to begin."
         }
     ]);
 
@@ -30,17 +34,19 @@ export default function Terminal() {
 
         if (trimmed === "clear") {
             setHistory([]);
+            onCommand?.("clear", false);
             return;
         }
 
         const command = commands[trimmed];
 
         if (command) {
+            onCommand?.(trimmed, false);
             const result = command();
             if (Array.isArray(result)) {
                 setHistory((prev) => [
                     ...prev,
-                    {type: "input", content: input},
+                    { type: "input", content: input },
                     ...result.map((line): HistoryItem => (
                         {
                             type: "output",
@@ -55,10 +61,11 @@ export default function Terminal() {
                 ])
             }
         } else {
-            setHistory((prev)=>[
+            onCommand?.(trimmed, true);
+            setHistory((prev) => [
                 ...prev,
-                {type: "input", content: input},
-                {type: "output", content: "Command not found. Type help."},
+                { type: "input", content: input },
+                { type: "output", content: "Command not found. Type help." },
             ])
         }
     }
@@ -71,59 +78,67 @@ export default function Terminal() {
     }
 
     return (
-        <div className="h-screen w-full flex items-center justify-center p-4 text-xs text-blue-200">
-            <div className={`w-120 h-120 md:w-140 lg:w-160 font-mono overflow-y-auto bg-black border border-blue-500 rounded-lg`} style={{ opacity }}>
-                <div className="h-10 w-full mb-2 border-b border-blue-500 flex justify-between items-center px-2">
-                    <div className="flex items-center justify-center py-2">
-                        <div className="w-4 h-4 bg-red-500 rounded-full ml-2 mt-2"></div>
-                        <div className="w-4 h-4 bg-yellow-500 rounded-full ml-2 mt-2"></div>
-                        <div className="w-4 h-4 bg-green-500 rounded-full ml-2 mt-2"></div>
-                        <p className="ml-5 mt-2">
-                            vijay@localhost:~
-                        </p>
-                    </div>
-                    <div className="flex items-center justify-center mt-2">
-                        <p>
-                            OPACITY
-                        </p>
-                        <input
-                            type="range"
-                            min="0.7" max="1" step="0.1"
-                            value={opacity}
-                            onChange={(e) => setOpacity(parseFloat(e.target.value))}
-                            className="w-20 ml-2" />
-                    </div>
+        <div
+            className={`w-120 h-120 md:w-140 lg:w-160 font-mono border border-blue-500 rounded-lg relative z-10 overflow-hidden flex flex-col bg-black/40 shadow-2xl shadow-blue-500/20 text-blue-200 text-xs`}
+            style={{ opacity }}
+        >
+            {/* Terminal Header (Nav) - No Backdrop Blur */}
+            <div className="h-10 w-full border-b border-blue-500 flex justify-between items-center px-4 bg-black/80 shrink-0">
+                <div className="flex items-center space-x-2">
+                    <div className="w-3 h-3 bg-red-500 rounded-full shadow-sm shadow-red-500/50"></div>
+                    <div className="w-3 h-3 bg-yellow-500 rounded-full shadow-sm shadow-yellow-500/50"></div>
+                    <div className="w-3 h-3 bg-green-500 rounded-full shadow-sm shadow-green-500/50"></div>
+                    <p className="ml-2 font-semibold tracking-tight text-blue-300/90 select-none">
+                        vijay@localhost:~
+                    </p>
                 </div>
+                <div className="flex items-center space-x-2">
+                    <span className="text-[10px] uppercase font-bold text-blue-400/70 hidden sm:inline select-none">
+                        Opacity
+                    </span>
+                    <input
+                        type="range"
+                        min="0.7" max="1" step="0.1"
+                        value={opacity}
+                        onChange={(e) => setOpacity(parseFloat(e.target.value))}
+                        className="w-16 cursor-pointer" />
+                </div>
+            </div>
+
+            {/* Content Area - With Backdrop Blur and Internal Scrolling */}
+            <div className="flex-1 overflow-y-auto backdrop-blur-md bg-black/20 pt-4 pb-6 scrollbar-thin scrollbar-thumb-blue-500/20">
                 {
                     history.map((item, index) => (
-                        <div key={index} className="mt-2 mb-1 px-4">
+                        <div key={index} className="mt-2 mb-1 px-6">
                             {item.type === "input" ? (
-                                <div>
-                                    <span className="text-blue-400">
+                                <div className="flex">
+                                    <span className="text-blue-400 font-bold shrink-0">
                                         vijay@localhost:~$
-                                    </span> {" "}
-                                    {item.content}
+                                    </span>
+                                    <span className="ml-2 text-blue-100">
+                                        {item.content}
+                                    </span>
                                 </div>
                             ) : (
-                            <div>{item.content}</div>
+                                <div className="leading-relaxed whitespace-pre-wrap break-words text-blue-100/90">{item.content}</div>
                             )}
                         </div>
                     ))
                 }
-                <div className="flex px-4 relative">
-                    <span className="text-blue-400">
+                <div className="flex px-6 relative mt-1">
+                    <span className="text-blue-400 font-bold shrink-0">
                         vijay@localhost:~$
                     </span>
-                    <span className="ml-2 whitespace-pre">
+                    <span className="ml-2 whitespace-pre text-blue-100 relative">
                         {currentInput}
-                        <span className="blink">▊</span>
+                        <span className="blink text-blue-400 absolute ml-0.5">▊</span>
                     </span>
                     <input type="text"
-                    autoFocus
-                    value={currentInput}
-                    onChange={(e)=>setCurrentInput(e.target.value)}
-                    className="absolute opacity-0 inset-0"
-                    onKeyDown={handleKeyDown}
+                        autoFocus
+                        value={currentInput}
+                        onChange={(e) => setCurrentInput(e.target.value)}
+                        className="absolute opacity-0 inset-0 cursor-text w-full"
+                        onKeyDown={handleKeyDown}
                     />
                 </div>
                 <div ref={bottomRef}></div>

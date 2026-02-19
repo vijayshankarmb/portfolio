@@ -22,7 +22,7 @@ export default function Terminal({ onCommand }: TerminalProps) {
     const [history, setHistory] = useState<HistoryItem[]>([
         {
             type: "output",
-            content: "Welcome to Krishna Domine. Type help to begin."
+            content: `Welcome to Krishna's Domine. Type help to begin.`
         }
     ]);
 

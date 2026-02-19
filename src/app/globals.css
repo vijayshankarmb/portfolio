@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'American Captain';
+  src: url('/fonts/American Captain.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -119,9 +127,24 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Scoped terminal cursor hiding */
+.terminal-section {
+  cursor: none !important;
+}
+
+.terminal-section button,
+.terminal-section a,
+.terminal-section input,
+.terminal-section select,
+.terminal-section textarea,
+.terminal-section [role="button"] {
+  cursor: none !important;
 }
 
 /* Custom Animation Utilities */
@@ -130,6 +153,7 @@
     opacity: 0.2;
     filter: blur(5px);
   }
+
   100% {
     opacity: 1;
     filter: blur(0px);
@@ -138,10 +162,12 @@
 
 .animate-fade-in-blur {
   animation: fadeInBlur 0.5s ease-out forwards;
-  opacity: 0; /* Start hidden */
+  opacity: 0;
+  /* Start hidden */
 }
 
-html.lenis, html.lenis body {
+html.lenis,
+html.lenis body {
   height: auto;
 }
 
@@ -162,8 +188,17 @@ html.lenis, html.lenis body {
 }
 
 @keyframes blink {
-  0%, 50%, 100% { opacity: 1; }
-  25%, 75% { opacity: 0; }
+
+  0%,
+  50%,
+  100% {
+    opacity: 1;
+  }
+
+  25%,
+  75% {
+    opacity: 0;
+  }
 }
 
 .blink {

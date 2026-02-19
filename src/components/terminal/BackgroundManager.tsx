@@ -14,7 +14,8 @@ export const BackgroundManager = ({ commandType, timestamp }: BackgroundManagerP
     const normalImages = [
         "/images/bg1.jpg",
         "/images/bg2.jpg",
-        "images/Krishna.jpg",
+        "images/bg3.jpg",
+        "images/bg4.jpg",
     ]
 
     const errorImages = [

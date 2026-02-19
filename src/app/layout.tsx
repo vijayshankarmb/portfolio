@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 import { siteConfig } from "@/config/site";
+import CustomCursor from "@/components/CustomCursor";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -68,7 +69,7 @@ export default function RootLayout({
             disableTransitionOnChange
             themes={['light', 'dark', 'extra-dark', 'system']}
           >
-              {children}
+            {children}
           </ThemeProvider>
           <script
             type="application/ld+json"

@@ -2,10 +2,13 @@
 
 import { useState, useEffect, useRef } from "react";
 import { processCommand } from "./CommandProcessor";
+import Typewriter from "./Typewriter";
+import { motion, AnimatePresence } from "framer-motion";
 
 type HistoryItem = {
     type: "input" | "output"
-    content: string
+    content: string | string[]
+    isList?: boolean
 }
 
 interface TerminalProps {
@@ -25,9 +28,15 @@ export default function Terminal({ onCommand }: TerminalProps) {
 
     const bottomRef = useRef<HTMLDivElement | null>(null);
 
+    // Auto-scroll effect
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [history]);
+
+    // Additional scroll during typing
+    const scrollToBottom = () => {
+        bottomRef.current?.scrollIntoView({ behavior: "auto" });
+    }
 
     const handleCommand = (input: string) => {
         if (!input.trim()) return;
@@ -49,11 +58,10 @@ export default function Terminal({ onCommand }: TerminalProps) {
             });
 
             if (Array.isArray(result.output)) {
-                result.output.forEach((line) => {
-                    newEntries.push({
-                        type: "output",
-                        content: line
-                    });
+                newEntries.push({
+                    type: "output",
+                    content: result.output,
+                    isList: true
                 });
             } else if (result.output) {
                 newEntries.push({
@@ -74,6 +82,22 @@ export default function Terminal({ onCommand }: TerminalProps) {
             setCurrentInput("");
         }
     }
+
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1,
+                delayChildren: 0.2
+            }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 10 },
+        visible: { opacity: 1, y: 0 }
+    };
 
     return (
         <div
@@ -116,7 +140,30 @@ export default function Terminal({ onCommand }: TerminalProps) {
                                     </span>
                                 </div>
                             ) : (
-                                <div className="leading-relaxed whitespace-pre-wrap wrap-break-words text-blue-100/90">{item.content}</div>
+                                <div className="leading-relaxed whitespace-pre-wrap wrap-break-words text-blue-100/90">
+                                    {item.isList && Array.isArray(item.content) ? (
+                                        <motion.div
+                                            variants={containerVariants}
+                                            initial="hidden"
+                                            animate="visible"
+                                            className="space-y-1"
+                                        >
+                                            {item.content.map((line, i) => (
+                                                <motion.div key={i} variants={itemVariants}>
+                                                    {line}
+                                                </motion.div>
+                                            ))}
+                                        </motion.div>
+                                    ) : (
+                                        typeof item.content === "string" && (
+                                            <Typewriter
+                                                text={item.content}
+                                                onComplete={scrollToBottom}
+                                                speed={15}
+                                            />
+                                        )
+                                    )}
+                                </div>
                             )}
                         </div>
                     ))

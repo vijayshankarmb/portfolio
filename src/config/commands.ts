@@ -18,6 +18,7 @@ export const commands: Record<string, commandHandler> = {
             "skills - View technical skills",
             "contact - Get in touch",
             "krishna - Enter Vishwaroop mode",
+            "pray - Enter prayer mode",
             "clear - Clear terminal",
         ]
     }),
@@ -36,6 +37,10 @@ export const commands: Record<string, commandHandler> = {
     krishna: () => ({
         type: "mode",
         output: "The conch has been blown... Vishwaroop awakens."
+    }),
+    pray: () => ({
+        type: "mode",
+        output: "Offering prayers... the divine presence approaches."
     })
 };
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { commands } from "@/config/commands";
+import { processCommand } from "./CommandProcessor";
 
 type HistoryItem = {
     type: "input" | "output"
@@ -9,12 +9,12 @@ type HistoryItem = {
 }
 
 interface TerminalProps {
-    onCommand?: (input: string, isError: boolean) => void;
+    onCommand?: (input: string, isError: boolean, type?: "normal" | "error" | "mode") => void;
 }
 
 export default function Terminal({ onCommand }: TerminalProps) {
 
-    const [opacity, setOpacity] = useState(1);
+    const [opacity, setOpacity] = useState(0.8);
     const [currentInput, setCurrentInput] = useState("");
     const [history, setHistory] = useState<HistoryItem[]>([
         {
@@ -30,44 +30,42 @@ export default function Terminal({ onCommand }: TerminalProps) {
     }, [history]);
 
     const handleCommand = (input: string) => {
+        if (!input.trim()) return;
+        const result = processCommand(input);
         const trimmed = input.trim().toLowerCase();
 
         if (trimmed === "clear") {
             setHistory([]);
-            onCommand?.("clear", false);
+            onCommand?.(trimmed, false, "normal");
             return;
         }
 
-        const command = commands[trimmed];
+        setHistory((prev) => {
+            const newEntries: HistoryItem[] = [];
 
-        if (command) {
-            onCommand?.(trimmed, false);
-            const result = command();
-            if (Array.isArray(result)) {
-                setHistory((prev) => [
-                    ...prev,
-                    { type: "input", content: input },
-                    ...result.map((line): HistoryItem => (
-                        {
-                            type: "output",
-                            content: line
-                        }))
-                ])
-            } else {
-                setHistory((prev) => [
-                    ...prev,
-                    { type: "input", content: input },
-                    { type: "output", content: result },
-                ])
+            newEntries.push({
+                type: "input",
+                content: input
+            });
+
+            if (Array.isArray(result.output)) {
+                result.output.forEach((line) => {
+                    newEntries.push({
+                        type: "output",
+                        content: line
+                    });
+                });
+            } else if (result.output) {
+                newEntries.push({
+                    type: "output",
+                    content: result.output
+                });
             }
-        } else {
-            onCommand?.(trimmed, true);
-            setHistory((prev) => [
-                ...prev,
-                { type: "input", content: input },
-                { type: "output", content: "Command not found. Type help." },
-            ])
-        }
+
+            return [...prev, ...newEntries];
+        });
+
+        onCommand?.(trimmed, result.type === "error", result.type);
     }
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -82,7 +80,6 @@ export default function Terminal({ onCommand }: TerminalProps) {
             className={`w-120 h-120 md:w-140 lg:w-160 font-mono border border-blue-500 rounded-lg relative z-10 overflow-hidden flex flex-col bg-black/40 shadow-2xl shadow-blue-500/20 text-blue-200 text-xs`}
             style={{ opacity }}
         >
-            {/* Terminal Header (Nav) - No Backdrop Blur */}
             <div className="h-10 w-full border-b border-blue-500 flex justify-between items-center px-4 bg-black/80 shrink-0">
                 <div className="flex items-center space-x-2">
                     <div className="w-3 h-3 bg-red-500 rounded-full shadow-sm shadow-red-500/50"></div>
@@ -105,7 +102,6 @@ export default function Terminal({ onCommand }: TerminalProps) {
                 </div>
             </div>
 
-            {/* Content Area - With Backdrop Blur and Internal Scrolling */}
             <div className="flex-1 overflow-y-auto backdrop-blur-md bg-black/20 pt-4 pb-6 scrollbar-thin scrollbar-thumb-blue-500/20">
                 {
                     history.map((item, index) => (
@@ -120,7 +116,7 @@ export default function Terminal({ onCommand }: TerminalProps) {
                                     </span>
                                 </div>
                             ) : (
-                                <div className="leading-relaxed whitespace-pre-wrap break-words text-blue-100/90">{item.content}</div>
+                                <div className="leading-relaxed whitespace-pre-wrap wrap-break-words text-blue-100/90">{item.content}</div>
                             )}
                         </div>
                     ))

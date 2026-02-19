@@ -44,8 +44,13 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: siteConfig.name,
     description: siteConfig.description,
-    images: ["/assets/logo.jpg"], // Using the logo as a fallback twitter image if no specific OG exists
+    images: ["/assets/logo2.jpg"], // Using the logo as a fallback twitter image if no specific OG exists
     creator: "@vijayXcodes",
+  },
+  icons: {
+    icon: "/assets/logo2.jpg",
+    shortcut: "/assets/logo2.jpg",
+    apple: "/assets/logo2.jpg",
   },
 
   manifest: "/manifest.webmanifest",

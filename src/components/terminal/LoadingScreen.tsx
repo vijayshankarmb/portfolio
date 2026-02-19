@@ -1,8 +1,46 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 
 export default function LoadingScreen() {
+    useEffect(() => {
+        const audio = new Audio("/audio/terminalIntro.mp3");
+        audio.load(); // Preload the audio
+
+        let hasPlayed = false;
+
+        const playAudio = () => {
+            if (!hasPlayed) {
+                audio.play()
+                    .then(() => {
+                        hasPlayed = true;
+                        // Clean up listeners once played
+                        window.removeEventListener("click", playAudio);
+                        window.removeEventListener("keydown", playAudio);
+                        window.removeEventListener("touchstart", playAudio);
+                    })
+                    .catch((err) => {
+                        console.log("Autoplay blocked, waiting for interaction:", err);
+                    });
+            }
+        };
+
+        // Try playing immediately
+        playAudio();
+
+        // Fallback: Add interaction listeners to play audio on first user action
+        window.addEventListener("click", playAudio);
+        window.addEventListener("keydown", playAudio);
+        window.addEventListener("touchstart", playAudio);
+
+        return () => {
+            window.removeEventListener("click", playAudio);
+            window.removeEventListener("keydown", playAudio);
+            window.removeEventListener("touchstart", playAudio);
+        };
+    }, []);
+
     return (
         <motion.div
             initial={{ opacity: 1 }}

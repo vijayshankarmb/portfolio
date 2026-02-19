@@ -1,3 +1,4 @@
+"use client";
 import React from 'react'
 import Link from 'next/link'
 import { NavbarConfig } from '@/config/Navbar'
@@ -6,11 +7,16 @@ import Image from 'next/image'
 import { ThemeDropdown } from '../ThemeSwitch'
 
 const Navbar = () => {
+    const playClick = () => {
+        const audio = new Audio("/audio/mixkit-single-key-type-2533.wav");
+        audio.play().catch(err => console.log("Audio play failed:", err));
+    };
+
     return (
         <Container className='sticky top-0 z-50 rounded-md py-6 backdrop-blur-sm'>
             <div className='flex items-center justify-between px-6'>
                 <div className='flex items-baseline gap-4'>
-                    <Link href="/">
+                    <Link href="/" onClick={playClick}>
                         <Image
                             className='h-12 w-12 rounded-md border border-gray-200 bg-blue-300 transition-all duration-300 hover:scale-90 dark:bg-yellow-300'
                             src={NavbarConfig.logo.src}
@@ -24,7 +30,9 @@ const Navbar = () => {
                             <Link
                                 className='transition-all duration-300 ease-in-out hover:underline hover:decoration-2 hover:underline-offset-4'
                                 key={item.label}
-                                href={item.href}>
+                                href={item.href}
+                                onClick={playClick}
+                            >
                                 {item.label}
                             </Link>
                         ))}

@@ -1,25 +1,26 @@
 "use client";
 
+import { useState } from "react";
 import Terminal from "@/components/terminal/Terminal";
+import { BackgroundManager } from "@/components/terminal/BackgroundManager";
 
 export default function TerminalPage() {
+  const [commandType, setCommandType] = useState<"normal" | "error" | "mode">("normal");
+  const [lastCommandTime, setLastCommandTime] = useState<number>(Date.now());
+
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center bg-black overflow-hidden">
-      {/* Background Photo */}
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          backgroundImage: "url('/assets/krishna2.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      />
-
-      {/* Persistent Dark Overlay */}
-      <div className="absolute inset-0 bg-black/40 z-0 pointer-events-none" />
-
-      {/* Terminal Component */}
-      <Terminal />
+    <div className="relative min-h-screen w-full flex items-center justify-center bg-black">
+      <BackgroundManager commandType={commandType} timestamp={lastCommandTime} />
+      <Terminal onCommand={(input, isError, type) => {
+        setLastCommandTime(Date.now());
+        if (type) {
+          setCommandType(type);
+        }
+      }} />
     </div>
   );
 }
+
+
+
+

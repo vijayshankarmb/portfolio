@@ -12,12 +12,16 @@ import PostgreSQL from '@/components/technologies/PostgreSQL';
 import Prisma from '@/components/technologies/Prisma';
 import ReactIcon from '@/components/technologies/ReactIcon';
 import TypeScript from '@/components/technologies/TypeScript';
+import Python from '@/components/technologies/Python';
+import FastAPI from '@/components/technologies/Fastapi';
+import LangChain from '@/components/technologies/Langchain';
+import LangGraph from '@/components/technologies/Langgraph';
 
 export const skillComponents = {
-    TypeScript: TypeScript,
-    ReactIcon: ReactIcon,
-    NextJs: NextJs,
-    Bun: Bun,
+    Python: Python,
+    FastAPI: FastAPI,
+    LangChain: LangChain,
+    LangGraph: LangGraph,
     PostgreSQL: PostgreSQL,
     NodeJs: NodeJs,
     MongoDB: MongoDB,
@@ -27,29 +31,29 @@ export const skillComponents = {
 
 export const heroConfig = {
     name: 'Vijay',
-    title: 'Building scalable web applications with clean architecture and performance in mind.',
+    title: 'AI & Backend Engineer building production-ready GenAI applications, agentic workflows, and scalable APIs.',
     avatar: '/assets/logo2.jpg',
 
     skills: [
         {
-            name: 'Typescript',
-            href: 'https://www.typescriptlang.org/',
-            component: 'TypeScript',
+            name: 'Python',
+            href: 'https://www.python.org/',
+            component: 'Python',
         },
         {
-            name: 'React',
-            href: 'https://react.dev/',
-            component: 'ReactIcon',
+            name: 'FastAPI',
+            href: 'https://fastapi.tiangolo.com/',
+            component: 'FastAPI',
         },
         {
-            name: 'Next.js',
-            href: 'https://nextjs.org/',
-            component: 'NextJs',
+            name: 'LangChain',
+            href: 'https://www.langchain.com/',
+            component: 'LangChain',
         },
         {
-            name: 'Bun',
-            href: 'https://bun.sh/',
-            component: 'Bun',
+            name: 'LangGraph',
+            href: 'https://www.langchain.com/langgraph',
+            component: 'LangGraph',
         },
         {
             name: 'PostgreSQL',
@@ -60,7 +64,7 @@ export const heroConfig = {
 
     description: {
         template:
-            'I build modern full-stack web applications using {skills:0}, {skills:1}, {skills:2}, {skills:3} and {skills:4}. I enjoy crafting clean <b>UI</b> and designing <b>scalable</b> backend systems. I am passionate about learning new technologies and continuously improving my skills.',
+            'I specialize in building GenAI applications, AI agents, and backend infrastructure using {skills:0}, {skills:1}, {skills:2}, {skills:3}, and {skills:4}. Focused on scalable APIs, RAG architectures, and real-world AI systems.'
     },
 
     buttons: [

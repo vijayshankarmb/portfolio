@@ -7,20 +7,25 @@ import PostgreSQL from '@/components/technologies/PostgreSQL';
 import Prisma from '@/components/technologies/Prisma';
 import ReactIcon from '@/components/technologies/ReactIcon';
 import TypeScript from '@/components/technologies/TypeScript';
+import Python from '@/components/technologies/Python';
+import FastAPI from '@/components/technologies/Fastapi';
+import LangChain from '@/components/technologies/Langchain';
+import LangGraph from '@/components/technologies/Langgraph';
+import Redis from '@/components/technologies/Redis';
+import Docker from '@/components/technologies/Docker';
 
 export const mySkills = [
-  <ReactIcon key="react" />,
-  <Bun key="bun" />,
-  <JavaScript key="javascript" />,
-  <TypeScript key="typescript" />,
-  <MongoDB key="mongodb" />,
-  <NextJs key="nextjs" />,
-  <NodeJs key="nodejs" />,
+  <Python key="python" />,
+  <FastAPI key="fastapi" />,
+  <LangChain key="langchain" />,
+  <LangGraph key="langgraph" />,
   <PostgreSQL key="postgresql" />,
-  <Prisma key="prisma" />,
+  <Docker key="docker" />,
+  <Redis key="redis" />,
 ];
 
 export const about = {
   name: 'Vijay Shankar',
-  description: `I'm a Full Stack Developer who enjoys building complete, end-to-end web applications from responsive frontends to scalable backend systems. I work with modern TypeScript-based technologies and focus on writing clean, maintainable code. I'm passionate about solving real-world problems and continuously improving my engineering and problem-solving skills.`,
+  description: `I'm an AI & Backend Engineer focused on building production-ready GenAI applications, scalable APIs, and intelligent backend systems. I work primarily with Python, FastAPI, LangChain, and modern AI tooling to develop LLM-powered applications, RAG pipelines, and agentic workflows. I enjoy solving real-world problems through clean architecture, scalable system design, and practical AI engineering.`,
 };
+

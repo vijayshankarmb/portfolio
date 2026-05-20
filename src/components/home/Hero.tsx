@@ -99,22 +99,26 @@ export default function Hero() {
 
             {/* Social Links */}
             <div className="mt-8 flex gap-2">
-                {socialLinks.map((link) => (
-                    <Tooltip key={link.name} delayDuration={0}>
-                        <TooltipTrigger asChild>
-                            <Link
-                                href={link.href}
-                                key={link.name}
-                                className="text-neutral-500 flex items-center gap-2"
-                            >
-                                <span className="size-6">{link.icon}</span>
-                            </Link>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                            <p>{link.name}</p>
-                        </TooltipContent>
-                    </Tooltip>
-                ))}
+                {socialLinks.map((link) => {
+                    const isExternal = link.href.startsWith('http');
+                    return (
+                        <Tooltip key={link.name} delayDuration={0}>
+                            <TooltipTrigger asChild>
+                                <a
+                                    href={link.href}
+                                    target={isExternal ? "_blank" : undefined}
+                                    rel={isExternal ? "noopener noreferrer" : undefined}
+                                    className="text-neutral-500 flex items-center gap-2 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+                                >
+                                    <span className="size-6">{link.icon}</span>
+                                </a>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>{link.name}</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    );
+                })}
             </div>
         </Container>
     );

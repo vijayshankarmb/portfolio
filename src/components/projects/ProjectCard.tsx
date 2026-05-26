@@ -15,6 +15,7 @@ import {
 import { type Project } from '@/types/project';
 import { Link } from 'next-view-transitions';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 import ArrowRight from '../svgs/ArrowRight';
@@ -29,9 +30,26 @@ interface ProjectCardProps {
 
 export default function ProjectCard({ project }: ProjectCardProps) {
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+    const router = useRouter();
+
+    const handleCardClick = (e: React.MouseEvent) => {
+        const target = e.target as HTMLElement;
+        if (target.closest('a') || target.closest('button')) {
+            return;
+        }
+
+        if (project.projectDetailsPageSlug) {
+            router.push(`/projects/${project.projectDetailsPageSlug}`);
+        } else if (project.live) {
+            window.open(project.live, '_blank');
+        }
+    };
 
     return (
-        <Card className="group h-full w-full overflow-hidden transition-all p-0 border-gray-100 dark:border-gray-800 shadow-none">
+        <Card 
+            onClick={handleCardClick}
+            className="group h-full w-full overflow-hidden transition-all p-0 border-gray-100 dark:border-gray-800 shadow-none hover:shadow-md cursor-pointer"
+        >
             <CardHeader className="p-0">
                 <div className="group relative aspect-video overflow-hidden">
                     <Image
@@ -71,7 +89,10 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                 <div className="space-y-4">
                     {/* Project Header - Title and Icons */}
                     <div className="flex items-center justify-between gap-4">
-                        <Link href={project.live} target='_blank'>
+                        <Link 
+                            href={project.projectDetailsPageSlug ? `/projects/${project.projectDetailsPageSlug}` : project.live} 
+                            target={project.projectDetailsPageSlug ? '_self' : '_blank'}
+                        >
                             <h3 className="text-xl font-semibold leading-tight group-hover:text-primary hover:cursor-pointer">
                                 {project.title}
                             </h3>
@@ -157,11 +178,11 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                         )}
                     </div>
                     <Link
-                        href={project.live}
-                        className="text-secondary flex items-center gap-2 text-sm hover:underline underline-offset-4 hover:text-primary transition-colors"
-                        target='_blank'
+                        href={project.projectDetailsPageSlug ? `/projects/${project.projectDetailsPageSlug}` : project.live}
+                        className="text-neutral-400 dark:text-neutral-400 flex items-center gap-2 text-sm hover:underline underline-offset-4 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+                        target={project.projectDetailsPageSlug ? '_self' : '_blank'}
                     >
-                        View Live <ArrowRight className="size-4" />
+                        {project.projectDetailsPageSlug ? 'View Details' : 'View Live'} <ArrowRight className="size-4" />
                     </Link>
                 </CardFooter>
             )}
